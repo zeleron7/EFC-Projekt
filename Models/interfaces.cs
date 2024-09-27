@@ -5,26 +5,26 @@ public enum enAnimalMood { Happy, Hungry, Lazy, Sulky, Buzy, Sleepy };
 public interface IAttraction
 {
     //
-    public Guid AttractionId {get; set;}
-     public string Name { get; set; }
+    public Guid AttractionId { get; set; }
+   public string Name { get; set; }
 
-    //Navigation props
-    public List<IComment> Comments { get; set; }
-    public ICities Cities { get; set; }
-    public  ICountry Country { get; set; }
+   public string Description { get; set; }
+
+   public ILocation Locations{ get; set; }
+
+   public List<IComment> Comments { get; set; } 
 }
-    
-public interface ICities
+public interface ILocation 
 {
-    //
-    public Guid CitiesId {get; set;}
-    public string Name {get; set;}
-    public int ZipCode {get; set;}
-    public string StreetAddress {get; set;}
-    public ICountry Country {get; set;}
+  public Guid LocationId { get; set; }
+  public string Country { get; set; }  
+  public string City { get; set; }
+  public string StreetAddress { get; set; }
 
-     public List<IAttraction> Attraction {get; set;}
-}
+  public List<IAttraction> Attractions { get; set; }
+    
+}   
+
 public interface IComment
 {
     //
@@ -35,14 +35,6 @@ public interface IComment
     public IUser User { get; set; }
     //Navigation props
     public IAttraction Attraction { get; set; }
-}
-public interface ICountry
-{
-    //
-    public Guid CountryId {get; set;}
-    public string Name {get; set;}
-    public List<ICities> Cities {get; set;}
-    public List<IAttraction> Attraction {get; set;}
 }
 public interface IUser
 {

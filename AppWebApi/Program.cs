@@ -24,8 +24,8 @@ builder.Services.AddSingleton<ILoggerProvider, csInMemoryLoggerProvider>();
 #endregion
 
 #region Dependency Inject
-builder.Services.AddScoped<IAnimalRepo, csAnimalRepo>();
-builder.Services.AddScoped<IAnimalsService,csAnimalServiceDb>();
+builder.Services.AddScoped<IAttractionRepo, csAttractionRepo>();
+builder.Services.AddScoped<IAttractionService, csAttractionServiceDb>();
 #endregion
 
 var app = builder.Build();

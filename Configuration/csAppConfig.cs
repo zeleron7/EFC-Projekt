@@ -7,6 +7,8 @@ public sealed class csAppConfig
     //configuration storage
     public const string Appsettingfile = "appsettings.json";
 
+    public const string UserSecretId = "18a32a17-88a5-4e2f-a78b-37c90621261b";
+
     #region Singleton design pattern
     private static readonly object instanceLock = new();
 
@@ -31,6 +33,8 @@ public sealed class csAppConfig
         //Create final ConfigurationRoot, _configuration which includes also AzureKeyVault
         var builder = new ConfigurationBuilder()
                             .SetBasePath(Directory.GetCurrentDirectory());
+        
+        builder = builder.AddUserSecrets(UserSecretId, reloadOnChange: true);
 
         //override with any locally set configuration from appsettings.json
         builder = builder.AddJsonFile(Appsettingfile, optional: true, reloadOnChange: true);

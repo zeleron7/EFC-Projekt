@@ -21,28 +21,29 @@ public class csAttractionRepo : IAttractionRepo
             var users = _seeder.ItemsToList<csUserDbM>(50);
             var attractions = _seeder.ItemsToList<csAttractionDbM>(1000);
             
+
+
             var allComments = new List <csCommentDbM>();
-            var cities = new List<csCitiesDbM>();
-            //var countries = new List<csCountryDbM>();
+            var locations = new List<csLocationDbM>();
 
             
 
             foreach (var attraction in attractions)
             {
-                var newLocation = new csCitiesDbM().Seed(_seeder);
+                var newLocation = new csLocationDbM().Seed(_seeder);
 
-                var exsistLocation = cities.FirstOrDefault(l => l.Country == newLocation.Country && l.Country == newLocation.Country)
-                ?? db.Cities.FirstOrDefault(l => l.Country == newLocation.Country && l.Country == newLocation.Country);
+                var exsistLocation = locations.FirstOrDefault(l => l.Country == newLocation.Country && l.City == newLocation.City)
+                ?? db.Locations.FirstOrDefault(l => l.Country == newLocation.Country && l.City == newLocation.City);
 
 
                 if (exsistLocation == null)
                 {
-                    cities.Add(newLocation);
-                    attraction.CitiesDbM = newLocation;
+                    locations.Add(newLocation);
+                    attraction.LocationDbM = newLocation;
                 }
                 else
                 {
-                    attraction.CitiesDbM = exsistLocation;
+                    attraction.LocationDbM = exsistLocation;
                 }
 
                 int nmrOfComments = _seeder.Next(0, 21);
@@ -61,9 +62,7 @@ public class csAttractionRepo : IAttractionRepo
 
             }
 
-           
-
-            db.Cities.AddRange(cities);
+            db.Locations.AddRange(locations);
             db.Users.AddRange(users);
             db.Attractions.AddRange(attractions);
             db.Comments.AddRange(allComments);
