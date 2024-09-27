@@ -1,8 +1,8 @@
 using DbModels;
 namespace DbRepos;
 
-public interface IAnimalRepo
+public interface IAttractionRepo
 {
-    public Task<List<csAnimalDbM>> AfricanAnimals(int _count);
-    public Task Seed(int _count);
+     public void RobustSeedAsync();
+  
 }

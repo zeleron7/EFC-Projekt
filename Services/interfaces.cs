@@ -3,5 +3,5 @@ namespace Services;
 
 public interface IAttractionService
 {
-    public void RobustSeedAsync();
+     public void RobustSeedAsync();
 }

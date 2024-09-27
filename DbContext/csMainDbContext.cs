@@ -11,8 +11,11 @@ namespace DbContext;
 public class csMainDbContext : Microsoft.EntityFrameworkCore.DbContext
 {
     #region C# model of database tables
-    public DbSet<csAnimalDbM> Animals { get; set; }
-    public DbSet<csZooDbM> Zoos { get; set; }
+    public DbSet<csAttractionDbM> Attractions { get; set; }
+    public DbSet<csCitiesDbM> Cities { get; set; }
+    public DbSet<csCommentDbM> Comments { get; set; }
+     public DbSet<csCountryDbM> Countries { get; set; }
+    public DbSet<csUserDbM> Users { get; set; }
     #endregion
 
 
