@@ -50,7 +50,7 @@ namespace AppWebApi.Controllers
 
     
 
-        // Add an endpoint to clear the database
+        // Endpoint to delete data from database
         [HttpDelete("clear")]
         public async Task<IActionResult> ClearDatabase()
         {

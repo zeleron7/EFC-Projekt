@@ -75,7 +75,7 @@ public class csAttractionRepo : IAttractionRepo
         }
     }
 
-    //TA BORT DETTA?
+    //Method to delete data from database
     public async Task ClearDatabaseAsync()
     {
         using (var db = csMainDbContext.DbContext("sysadmin"))
