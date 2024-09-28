@@ -74,5 +74,21 @@ public class csAttractionRepo : IAttractionRepo
 
         }
     }
+
+    //TA BORT DETTA?
+    public async Task ClearDatabaseAsync()
+    {
+        using (var db = csMainDbContext.DbContext("sysadmin"))
+        {
+            // Remove all data in the right order to handle foreign key constraints
+            db.Comments.RemoveRange(db.Comments); // Delete comments first
+            db.Attractions.RemoveRange(db.Attractions); // Then attractions
+            db.Locations.RemoveRange(db.Locations); // Then locations
+            db.Users.RemoveRange(db.Users); // Finally, users
+
+            // Save changes to database
+            await db.SaveChangesAsync();
+        }
+    }
    
 }

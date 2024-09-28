@@ -17,12 +17,17 @@ public class csAttractionServiceDb: IAttractionService
     public void RobustSeedAsync () => _repo.RobustSeedAsync();
 
 
-   
 
-   
 
     public csAttractionServiceDb(IAttractionRepo repo)
     {
         _repo = repo;
+    }
+
+    
+    public async Task ClearDatabaseAsync()
+    {
+        // Call the repository method to clear the database
+        await _repo.ClearDatabaseAsync();
     }
 }

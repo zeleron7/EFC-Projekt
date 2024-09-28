@@ -22,6 +22,7 @@ namespace AppWebApi.Controllers
         private ILogger<csAttractionController> _logger = null;
         private IAttractionService _service = null;
 
+
         //GET: api/csAdmin/Attractions
         [HttpGet()]
         [ActionName("Attractions")]
@@ -45,6 +46,26 @@ namespace AppWebApi.Controllers
             }
            
         }
+
+
+    
+
+        // Add an endpoint to clear the database
+        [HttpDelete("clear")]
+        public async Task<IActionResult> ClearDatabase()
+        {
+            try
+            {
+                await _service.ClearDatabaseAsync();
+                return Ok("Database cleared successfully");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+    
+
 
         public csAttractionController(IAttractionService service, ILogger<csAttractionController> logger)
         {
