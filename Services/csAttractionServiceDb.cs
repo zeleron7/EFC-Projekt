@@ -16,6 +16,9 @@ public class csAttractionServiceDb: IAttractionService
 
     public void RobustSeedAsync () => _repo.RobustSeedAsync();
 
+
+   
+
    
 
     public csAttractionServiceDb(IAttractionRepo repo)
