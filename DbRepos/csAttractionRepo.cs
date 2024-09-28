@@ -90,5 +90,81 @@ public class csAttractionRepo : IAttractionRepo
             await db.SaveChangesAsync();
         }
     }
+
+
+
+    // Method to filter attractions by category, title, description, country, and city
+    /*public async Task<List<csAttractionDbM>> GetFilteredAttractionsAsync(string? category, string? title, string? description, string? country, string? city)
+    {
+        using (var db = csMainDbContext.DbContext("sysadmin"))
+        {
+            var query = db.Attractions.Include(a => a.LocationDbM).AsQueryable();
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                query = query.Where(a => a.Category == category);
+            }
+            if (!string.IsNullOrEmpty(title))
+            {
+                query = query.Where(a => a.Title.Contains(title));
+            }
+            if (!string.IsNullOrEmpty(description))
+            {
+                query = query.Where(a => a.Description.Contains(description));
+            }
+            if (!string.IsNullOrEmpty(country))
+            {
+                query = query.Where(a => a.LocationDbM.Country == country);
+            }
+            if (!string.IsNullOrEmpty(city))
+            {
+                query = query.Where(a => a.LocationDbM.City == city);
+            }
+
+            return await query.ToListAsync();
+        }
+    }
+
+    // Method to show all attractions without any comments
+    public async Task<List<csAttractionDbM>> GetAttractionsWithoutCommentsAsync()
+    {
+        using (var db = csMainDbContext.DbContext("sysadmin"))
+        {
+            var attractionsWithoutComments = await db.Attractions
+                .Include(a => a.Comments)
+                .Where(a => !a.Comments.Any())
+                .ToListAsync();
+
+            return attractionsWithoutComments;
+        }
+    }
+
+    // Method to show one attraction's category, title, description, and all associated comments
+    public async Task<csAttractionDbM?> GetAttractionWithCommentsAsync(int attractionId)
+    {
+        using (var db = csMainDbContext.DbContext("sysadmin"))
+        {
+            var attraction = await db.Attractions
+                .Include(a => a.Comments)
+                .ThenInclude(c => c.UserDbM) // Including the users who wrote the comments
+                .FirstOrDefaultAsync(a => a.AttractionId == attractionId);
+
+            return attraction;
+        }
+    }
+
+    // Method to show all users and their comments
+    public async Task<List<csUserDbM>> GetUsersAndCommentsAsync()
+    {
+        using (var db = csMainDbContext.DbContext("sysadmin"))
+        {
+            var usersWithComments = await db.Users
+                .Include(u => u.Comments)
+                .ThenInclude(c => c.AttractionDbM) // Including the attractions on which the users commented
+                .ToListAsync();
+
+            return usersWithComments;
+        }
+    }*/
    
 }
