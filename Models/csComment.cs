@@ -11,10 +11,7 @@ public class csComment : IComment, ISeed<csComment>
     public virtual string Comment { get; set; }
     public virtual DateTime Date { get; set; }
     public bool Seeded { get; set; } = false;
-
     public virtual IUser User {get; set;}
-
-    //Navigation props
     public virtual IAttraction Attraction { get; set; }
 
     public virtual csComment Seed(csSeedGenerator _seeder)

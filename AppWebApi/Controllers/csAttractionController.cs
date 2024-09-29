@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
+using Models.DTO;
 using Seido.Utilities.SeedGenerator;
 
 using Models;
@@ -23,7 +23,7 @@ namespace AppWebApi.Controllers
         private IAttractionService _service = null;
 
 
-        //GET: api/csAdmin/Attractions
+        /*//GET: api/csAdmin/Attractions
         [HttpGet()]
         [ActionName("Attractions")]
         [ProducesResponseType(200, Type = typeof(List<IAttraction>))]
@@ -45,7 +45,7 @@ namespace AppWebApi.Controllers
                 return BadRequest(ex.Message);
             }
            
-        }
+        }*/
 
 
     
@@ -64,6 +64,33 @@ namespace AppWebApi.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+
+        //GET: api/addresses/read
+        [HttpGet()]
+        [ActionName("Read")]
+        [ProducesResponseType(200, Type = typeof(csRespPageDTO<IAttraction>))]
+        [ProducesResponseType(400, Type = typeof(string))]
+        public async Task<IActionResult> Read(string seeded = "true", string flat = "true",
+            string filter = null, string pageNr = "0", string pageSize = "10")
+        {
+            _logger.LogInformation("Endpoint Attractions executed");
+            try
+            {
+                 _logger.LogInformation("Endpoint Attractions executed");
+                bool _seeded = bool.Parse(seeded);
+                bool _flat = bool.Parse(flat);
+                int _pageNr = int.Parse(pageNr);
+                int _pageSize = int.Parse(pageSize);
+     
+                var _resp = await _service.ReadAttractionsAsync(_seeded, _flat, filter?.Trim()?.ToLower(), _pageNr, _pageSize);     
+                return Ok(_resp);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     
 
 
@@ -72,5 +99,7 @@ namespace AppWebApi.Controllers
             _service = service;
             _logger = logger;
         }
+
+        
     }
 }

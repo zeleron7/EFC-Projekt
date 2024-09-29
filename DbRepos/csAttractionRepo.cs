@@ -4,6 +4,8 @@ using DbContext;
 using Seido.Utilities.SeedGenerator;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.DTO;
+using Microsoft.Identity.Client;
 
 namespace DbRepos;
 
@@ -69,12 +71,13 @@ public class csAttractionRepo : IAttractionRepo
 
             db.SaveChangesAsync();
 
-
            
 
         }
+
     }
 
+    
     //Method to delete data from database
     public async Task ClearDatabaseAsync()
     {
@@ -167,4 +170,30 @@ public class csAttractionRepo : IAttractionRepo
         }
     }*/
    
+
+    public async Task<csRespPageDTO<IAttraction>> ReadAttractionsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
+    {
+        using (var db = csMainDbContext.DbContext("sysadmin"))
+        {
+            IQueryable<csAttractionDbM> _query;
+            if (flat)
+            {
+                _query = db.Attractions.AsNoTracking();
+            }
+            else
+            {
+                _query = db.Attractions.AsNoTracking()
+                    .Include(i => i.commentDbM)
+                    .Include(i => i.LocationDbM);
+                    
+            }
+            
+            var _ret = new csRespPageDTO<IAttraction>()
+            {
+                PageItems = await _query.ToListAsync<IAttraction>(),
+            };
+            return _ret;
+        }
+    }
+
 }
