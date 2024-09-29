@@ -22,11 +22,11 @@ public class csAttractionRepo : IAttractionRepo
         {
             var users = _seeder.ItemsToList<csUserDbM>(50);
             var attractions = _seeder.ItemsToList<csAttractionDbM>(1000);
-            
+            var locations = _seeder.ItemsToList<csLocationDbM>(100); 
 
 
             var allComments = new List <csCommentDbM>();
-            var locations = new List<csLocationDbM>();
+            //var locations = new List<csLocationDbM>();
 
             
 
@@ -94,106 +94,110 @@ public class csAttractionRepo : IAttractionRepo
         }
     }
 
-
-
-    // Method to filter attractions by category, title, description, country, and city
-    /*public async Task<List<csAttractionDbM>> GetFilteredAttractionsAsync(string? category, string? title, string? description, string? country, string? city)
-    {
-        using (var db = csMainDbContext.DbContext("sysadmin"))
-        {
-            var query = db.Attractions.Include(a => a.LocationDbM).AsQueryable();
-
-            if (!string.IsNullOrEmpty(category))
-            {
-                query = query.Where(a => a.Category == category);
-            }
-            if (!string.IsNullOrEmpty(title))
-            {
-                query = query.Where(a => a.Title.Contains(title));
-            }
-            if (!string.IsNullOrEmpty(description))
-            {
-                query = query.Where(a => a.Description.Contains(description));
-            }
-            if (!string.IsNullOrEmpty(country))
-            {
-                query = query.Where(a => a.LocationDbM.Country == country);
-            }
-            if (!string.IsNullOrEmpty(city))
-            {
-                query = query.Where(a => a.LocationDbM.City == city);
-            }
-
-            return await query.ToListAsync();
-        }
-    }
-
-    // Method to show all attractions without any comments
-    public async Task<List<csAttractionDbM>> GetAttractionsWithoutCommentsAsync()
-    {
-        using (var db = csMainDbContext.DbContext("sysadmin"))
-        {
-            var attractionsWithoutComments = await db.Attractions
-                .Include(a => a.Comments)
-                .Where(a => !a.Comments.Any())
-                .ToListAsync();
-
-            return attractionsWithoutComments;
-        }
-    }
-
-    // Method to show one attraction's category, title, description, and all associated comments
-    public async Task<csAttractionDbM?> GetAttractionWithCommentsAsync(int attractionId)
-    {
-        using (var db = csMainDbContext.DbContext("sysadmin"))
-        {
-            var attraction = await db.Attractions
-                .Include(a => a.Comments)
-                .ThenInclude(c => c.UserDbM) // Including the users who wrote the comments
-                .FirstOrDefaultAsync(a => a.AttractionId == attractionId);
-
-            return attraction;
-        }
-    }
-
-    // Method to show all users and their comments
-    public async Task<List<csUserDbM>> GetUsersAndCommentsAsync()
-    {
-        using (var db = csMainDbContext.DbContext("sysadmin"))
-        {
-            var usersWithComments = await db.Users
-                .Include(u => u.Comments)
-                .ThenInclude(c => c.AttractionDbM) // Including the attractions on which the users commented
-                .ToListAsync();
-
-            return usersWithComments;
-        }
-    }*/
-   
-
     public async Task<csRespPageDTO<IAttraction>> ReadAttractionsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
-        using (var db = csMainDbContext.DbContext("sysadmin"))
+    using (var db = csMainDbContext.DbContext("sysadmin"))
+    {
+        IQueryable<csAttractionDbM> _query;
+
+        // Base query for flat or nested includes
+        if (flat)
         {
-            IQueryable<csAttractionDbM> _query;
-            if (flat)
-            {
-                _query = db.Attractions.AsNoTracking();
-            }
-            else
-            {
-                _query = db.Attractions.AsNoTracking()
-                    .Include(i => i.commentDbM)
-                    .Include(i => i.LocationDbM);
-                    
-            }
-            
-            var _ret = new csRespPageDTO<IAttraction>()
-            {
-                PageItems = await _query.ToListAsync<IAttraction>(),
-            };
-            return _ret;
+            _query = db.Attractions.AsNoTracking();
         }
+        else
+        {
+            _query = db.Attractions.AsNoTracking()
+                .Include(i => i.commentDbM)
+                .Include(i => i.LocationDbM);
+        }
+
+        // Filtering by category, title, description, country, and city
+        if (!string.IsNullOrEmpty(filter))
+        {
+            _query = _query.Where(a =>
+                (a.Category != null && a.Category.Contains(filter)) ||
+                (a.Title != null && a.Title.Contains(filter)) ||
+                (a.Description != null && a.Description.Contains(filter)) ||
+                (a.LocationDbM != null && a.LocationDbM.Country != null && a.LocationDbM.Country.Contains(filter)) ||
+                (a.LocationDbM != null && a.LocationDbM.City != null && a.LocationDbM.City.Contains(filter))
+            );
+        }
+
+        _query = _query.Where(a => a.commentDbM == null || !a.commentDbM.Any()); //TA BORT DENNA RAD?
+
+        // Pagination (skip and take)
+        var totalItems = await _query.CountAsync();
+        var items = await _query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync<IAttraction>();
+
+        // Returning paginated response
+        var _ret = new csRespPageDTO<IAttraction>
+        {
+            PageItems = items,
+            DbItemsCount = totalItems,
+            PageNr = pageNumber,
+            PageSize = pageSize
+        };
+
+        return _ret;
     }
+    }
+
+
+    public async Task<csRespPageDTO<IAttraction>> ReadAttractionsWithoutCommentsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
+    {
+    using (var db = csMainDbContext.DbContext("sysadmin"))
+    {
+        IQueryable<csAttractionDbM> _query;
+
+        // Base query for flat or nested includes
+        if (flat)
+        {
+            _query = db.Attractions.AsNoTracking();
+        }
+        else
+        {
+            _query = db.Attractions.AsNoTracking()
+                .Include(i => i.commentDbM)
+                .Include(i => i.LocationDbM);
+        }
+
+        // Filtering by category, title, description, country, and city
+        if (!string.IsNullOrEmpty(filter))
+        {
+            _query = _query.Where(a =>
+                (a.Category != null && a.Category.Contains(filter)) ||
+                (a.Title != null && a.Title.Contains(filter)) ||
+                (a.Description != null && a.Description.Contains(filter)) ||
+                (a.LocationDbM != null && a.LocationDbM.Country != null && a.LocationDbM.Country.Contains(filter)) ||
+                (a.LocationDbM != null && a.LocationDbM.City != null && a.LocationDbM.City.Contains(filter))
+            );
+        }
+
+        _query = _query.Where(a => a.commentDbM == null || !a.commentDbM.Any()); //TA BORT DENNA RAD?
+
+        // Pagination (skip and take)
+        var totalItems = await _query.CountAsync();
+        var items = await _query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync<IAttraction>();
+
+        // Returning paginated response
+        var _ret = new csRespPageDTO<IAttraction>
+        {
+            PageItems = items,
+            DbItemsCount = totalItems,
+            PageNr = pageNumber,
+            PageSize = pageSize
+        };
+
+        return _ret;
+    }
+    }
+
 
 }

@@ -52,6 +52,8 @@ namespace DbContext.Migrations.SqlServerDbContext
                     LocationDbMLocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

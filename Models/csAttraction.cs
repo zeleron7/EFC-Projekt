@@ -9,6 +9,8 @@ public class csAttraction :ISeed<csAttraction> , IAttraction
    public virtual Guid AttractionId { get; set; }
    public virtual string Name { get; set; }
    public virtual string Description { get; set; }
+   public virtual string Category { get; set; } 
+   public virtual string Title { get; set; } 
    public virtual ILocation Locations{ get; set; }
    public virtual List<IComment> Comments { get; set; } = null;
 
@@ -23,7 +25,9 @@ public class csAttraction :ISeed<csAttraction> , IAttraction
         AttractionId = Guid.NewGuid();
         Name = _name[0];
         Description = _seeder.LatinSentence;
-        
+        Category = _seeder.LatinSentence;  
+        Title = _seeder.LatinSentence;      
+
         return this;
     }
     #endregion

@@ -20,6 +20,11 @@ public class csAttractionServiceDb: IAttractionService
         return _repo.ReadAttractionsAsync(seeded, flat, filter, pageNumber, pageSize);
     }
 
+    public Task<csRespPageDTO<IAttraction>> ReadAttractionsWithoutCommentsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
+    {
+        return _repo.ReadAttractionsAsync(seeded, flat, filter, pageNumber, pageSize);
+    }
+
     public csAttractionServiceDb(IAttractionRepo repo)
     {
         _repo = repo;

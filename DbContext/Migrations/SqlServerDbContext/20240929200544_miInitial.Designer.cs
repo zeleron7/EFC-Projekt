@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbContext.Migrations.SqlServerDbContext
 {
     [DbContext(typeof(csMainDbContext.SqlServerDbContext))]
-    [Migration("20240927164350_miInitial")]
+    [Migration("20240929200544_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -31,6 +31,9 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(200)");
 
@@ -42,6 +45,9 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.Property<bool>("Seeded")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("AttractionId");
 
