@@ -31,9 +31,6 @@ namespace DbContext.Migrations.SqlServerDbContext
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    strFirstName = table.Column<string>(type: "nvarchar(200)", nullable: true),
-                    strLastName = table.Column<string>(type: "nvarchar(200)", nullable: true),
-                    strAge = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     Age = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -71,8 +68,6 @@ namespace DbContext.Migrations.SqlServerDbContext
                 columns: table => new
                 {
                     CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    strComment = table.Column<string>(type: "nvarchar(200)", nullable: true),
-                    strDate = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     UserDbMUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AttractionDbMAttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Comment = table.Column<string>(type: "nvarchar(200)", nullable: true),

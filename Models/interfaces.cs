@@ -25,7 +25,7 @@ public interface ILocation
 
 public interface IComment
 {
-    public Guid CommentId {get; set;}
+    public Guid CommentId { get; set; }
     public string Comment { get; set; }
     public DateTime Date { get; set; }
     
@@ -34,11 +34,10 @@ public interface IComment
 }
 public interface IUser
 {
-    public Guid UserId {get; set;}
-    public string FirstName {get; set;}
-    public string LastName {get; set;}
-    
-    public DateTime Age {get; set;}
-     public List<IComment> Comments {get; set;}
+    public Guid UserId { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public DateTime Age { get; set; }
+    public List<IComment> Comments { get; set; }
 }
 

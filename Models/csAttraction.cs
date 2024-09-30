@@ -26,8 +26,8 @@ public class csAttraction :ISeed<csAttraction> , IAttraction
         Name = _name[0];
         Description = _seeder.LatinSentence;
         Category = _seeder.LatinSentence;  
-        Title = _seeder.LatinSentence;      
-
+        Title = _seeder.LatinSentence; 
+        
         return this;
     }
     #endregion

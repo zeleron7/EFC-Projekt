@@ -11,9 +11,10 @@ namespace DbRepos;
 
 public class csAttractionRepo : IAttractionRepo
 {
-
     const string _seedSource = "./friends-seeds1.json";
-    public void  RobustSeedAsync()
+
+    //Method to seed database
+    public void  SeedDatabaseAsync()
     {
         var fn = Path.GetFullPath(_seedSource);
         var _seeder = new csSeedGenerator(fn);
@@ -23,20 +24,14 @@ public class csAttractionRepo : IAttractionRepo
             var users = _seeder.ItemsToList<csUserDbM>(50);
             var attractions = _seeder.ItemsToList<csAttractionDbM>(1000);
             var locations = _seeder.ItemsToList<csLocationDbM>(100); 
-
-
             var allComments = new List <csCommentDbM>();
-            //var locations = new List<csLocationDbM>();
-
             
-
             foreach (var attraction in attractions)
             {
                 var newLocation = new csLocationDbM().Seed(_seeder);
 
                 var exsistLocation = locations.FirstOrDefault(l => l.Country == newLocation.Country && l.City == newLocation.City)
                 ?? db.Locations.FirstOrDefault(l => l.Country == newLocation.Country && l.City == newLocation.City);
-
 
                 if (exsistLocation == null)
                 {
@@ -59,11 +54,9 @@ public class csAttractionRepo : IAttractionRepo
 
                        allComments.Add(comment);
                     }
-
-                }
-
+                }   
             }
-
+           
             db.Locations.AddRange(locations);
             db.Users.AddRange(users);
             db.Attractions.AddRange(attractions);
@@ -71,14 +64,10 @@ public class csAttractionRepo : IAttractionRepo
 
             db.SaveChangesAsync();
 
-           
-
         }
-
     }
-
     
-    //Method to delete data from database
+    //Method to clear database
     public async Task ClearDatabaseAsync()
     {
         using (var db = csMainDbContext.DbContext("sysadmin"))
@@ -94,6 +83,7 @@ public class csAttractionRepo : IAttractionRepo
         }
     }
 
+    //Method to read attractions
     public async Task<csRespPageDTO<IAttraction>> ReadAttractionsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
     using (var db = csMainDbContext.DbContext("sysadmin"))
@@ -108,8 +98,9 @@ public class csAttractionRepo : IAttractionRepo
         else
         {
             _query = db.Attractions.AsNoTracking()
-                .Include(i => i.commentDbM)
+                .Include(i => i.CommentDbM)
                 .Include(i => i.LocationDbM);
+                
         }
 
         // Filtering by category, title, description, country, and city
@@ -124,12 +115,12 @@ public class csAttractionRepo : IAttractionRepo
             );
         }
 
-        _query = _query.Where(a => a.commentDbM == null || !a.commentDbM.Any()); //TA BORT DENNA RAD?
+
 
         // Pagination (skip and take)
         var totalItems = await _query.CountAsync();
         var items = await _query
-            .Skip((pageNumber - 1) * pageSize)
+            .Skip(pageNumber * pageSize)
             .Take(pageSize)
             .ToListAsync<IAttraction>();
 
@@ -146,7 +137,7 @@ public class csAttractionRepo : IAttractionRepo
     }
     }
 
-
+    //Method to read attraction without comments
     public async Task<csRespPageDTO<IAttraction>> ReadAttractionsWithoutCommentsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
     using (var db = csMainDbContext.DbContext("sysadmin"))
@@ -161,7 +152,7 @@ public class csAttractionRepo : IAttractionRepo
         else
         {
             _query = db.Attractions.AsNoTracking()
-                .Include(i => i.commentDbM)
+                .Include(i => i.CommentDbM)
                 .Include(i => i.LocationDbM);
         }
 
@@ -177,7 +168,7 @@ public class csAttractionRepo : IAttractionRepo
             );
         }
 
-        _query = _query.Where(a => a.commentDbM == null || !a.commentDbM.Any()); //TA BORT DENNA RAD?
+        _query = _query.Where(a => a.CommentDbM == null || !a.CommentDbM.Any()); //TA BORT DENNA RAD?
 
         // Pagination (skip and take)
         var totalItems = await _query.CountAsync();
@@ -199,5 +190,43 @@ public class csAttractionRepo : IAttractionRepo
     }
     }
 
+    //Method to read one attraction
+    public async Task<csAttractionDbM> ReadOneAttractionAsync(Guid attractionId)
+    {
+    using (var db = csMainDbContext.DbContext("sysadmin"))
+    {
+        // Query to get a single attraction by ID and include its comments and location
+        var attraction = await db.Attractions
+            .AsNoTracking()
+            .Include(a => a.CommentDbM)   // Include comments
+            .Include(a => a.LocationDbM)  // Optionally include location data
+            .Where(a =>  a.AttractionId == attractionId)
+            .FirstOrDefaultAsync();
 
+        // If no attraction is found, return null
+        if (attraction == null)
+        {
+            return null; // Or throw an exception if needed
+        }
+
+        return attraction; // Return the entire attraction entity with comments and location included
+    }
+    }
+
+    //Method to read users and their comments
+    public async Task<csUserDbM> ReadUsers()
+    {
+    using (var db = csMainDbContext.DbContext("sysadmin"))
+    {
+        // Fetch all users with their comments using eager loading (Include)
+        var usersWithComments = await db.Users
+            .Include(u => u.CommentDbM)  // Eagerly load related comments
+            .FirstOrDefaultAsync();
+
+        // Convert to csUserDbM model (including user data and their comments)
+       
+
+        return usersWithComments;
+    }
+    }
 }

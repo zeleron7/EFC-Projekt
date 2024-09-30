@@ -23,13 +23,12 @@ public class csLocation : ISeed<csLocation> , ILocation, IEquatable<csLocation>
 
     public virtual csLocation Seed(csSeedGenerator _seed)
     {
-        
-        Seeded = true;
-        Country = _seed.Country;
-        StreetAddress = _seed.StreetAddress(Country);
-        City = _seed.City(Country);
-        LocationId = Guid.NewGuid();
-        return this;
+      Seeded = true;
+      Country = _seed.Country;
+      StreetAddress = _seed.StreetAddress(Country);
+      City = _seed.City(Country);
+      LocationId = Guid.NewGuid();
+      return this;
     }
 }
 

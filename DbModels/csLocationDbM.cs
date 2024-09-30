@@ -17,12 +17,11 @@ public class csLocationDbM : csLocation, ISeed<csLocationDbM>, IEquatable<csLoca
    [JsonIgnore]
    public virtual List<csAttractionDbM> AttractionsDbM { get; set; } = null;
 
-   public bool Equals(csLocationDbM other) => (other != null) ? ((City, Country) ==
+   public bool Equals(csLocationDbM other) => (other != null) ? ((City, Country) ==  
             (other.City, other.Country)) : false;
 
         public override bool Equals(object obj) => Equals(obj as csLocationDbM);
-        public override int GetHashCode() => (City, Country).GetHashCode();
-
+        public override int GetHashCode() => (City, Country, StreetAddress).GetHashCode();
 
    public override csLocationDbM Seed (csSeedGenerator _seeder)
     {

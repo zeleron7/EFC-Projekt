@@ -22,8 +22,8 @@ namespace AppWebApi.Controllers
         private ILogger<csAttractionController> _logger = null;
         private IAttractionService _service = null;
 
-        // Endpoint to delete data from database
-        [HttpDelete("clear")]
+        //Clear database
+        [HttpDelete("Clear")]
         public async Task<IActionResult> ClearDatabase()
         {
             try
@@ -38,12 +38,12 @@ namespace AppWebApi.Controllers
         }
 
 
-        //GET: api/addresses/read
+        //GET: api/Attractions/Read
         [HttpGet()]
-        [ActionName("Read")]
+        [ActionName("ReadAttractions")]
         [ProducesResponseType(200, Type = typeof(csRespPageDTO<IAttraction>))]
         [ProducesResponseType(400, Type = typeof(string))]
-        public async Task<IActionResult> Read(string seeded = "true", string flat = "true",
+        public async Task<IActionResult> ReadAttractions(string seeded = "true", string flat = "true",
             string filter = null, string pageNr = "0", string pageSize = "10")
         {
             _logger.LogInformation("Endpoint Attractions executed");
@@ -65,12 +65,12 @@ namespace AppWebApi.Controllers
         }
     
 
-         //GET: api/addresses/read
+        //GET: api/Attractions/ReadWithoutComments
         [HttpGet()]
         [ActionName("ReadWithoutComment")]
         [ProducesResponseType(200, Type = typeof(csRespPageDTO<IAttraction>))]
         [ProducesResponseType(400, Type = typeof(string))]
-        public async Task<IActionResult> ReadWithoutComment(string seeded = "true", string flat = "true",
+        public async Task<IActionResult> ReadWithoutComments(string seeded = "true", string flat = "true",
             string filter = null, string pageNr = "0", string pageSize = "10")
         {
             _logger.LogInformation("Endpoint Attractions executed");
@@ -91,6 +91,44 @@ namespace AppWebApi.Controllers
             }
         }
 
+
+        //GET: api/Attractions/ReadOneAttraction
+        [HttpGet()]
+        [ActionName("ReadOneAttraction")]
+        [ProducesResponseType(200, Type = typeof(csRespPageDTO<IAttraction>))]
+        [ProducesResponseType(400, Type = typeof(string))]
+        public async Task<IActionResult> ReadOneAttraction(Guid id)
+        {
+            _logger.LogInformation("Endpoint Attractions executed");
+
+            var attraction = await _service.ReadOneAttractionAsync(id);
+            if (attraction == null)
+            {
+                return NotFound(); // Returns 404 response
+            }
+ 
+            return Ok(attraction);
+
+        }
+
+        //GET: api/Users/Read
+        [HttpGet()]
+        [ActionName("ReadUsers")]
+        [ProducesResponseType(200, Type = typeof(csRespPageDTO<IUser>))]
+        [ProducesResponseType(400, Type = typeof(string))]
+        public async Task<IActionResult> ReadUsers()
+        {
+            _logger.LogInformation("Endpoint Users executed");
+
+            var users = await _service.ReadUsers();
+            if(users == null)
+            {
+                return NotFound(); // Returns 404 response
+            }
+
+            return Ok(users);  // Return the data with 200 OK status
+
+        }
 
         public csAttractionController(IAttractionService service, ILogger<csAttractionController> logger)
         {

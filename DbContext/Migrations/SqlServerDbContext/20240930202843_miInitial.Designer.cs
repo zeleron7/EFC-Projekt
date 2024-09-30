@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbContext.Migrations.SqlServerDbContext
 {
     [DbContext(typeof(csMainDbContext.SqlServerDbContext))]
-    [Migration("20240929200544_miInitial")]
+    [Migration("20240930202843_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -77,12 +77,6 @@ namespace DbContext.Migrations.SqlServerDbContext
                     b.Property<Guid?>("UserDbMUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("strComment")
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("strDate")
-                        .HasColumnType("nvarchar(200)");
-
                     b.HasKey("CommentId");
 
                     b.HasIndex("AttractionDbMAttractionId");
@@ -133,15 +127,6 @@ namespace DbContext.Migrations.SqlServerDbContext
                     b.Property<bool>("Seeded")
                         .HasColumnType("bit");
 
-                    b.Property<string>("strAge")
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("strFirstName")
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("strLastName")
-                        .HasColumnType("nvarchar(200)");
-
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
@@ -159,7 +144,7 @@ namespace DbContext.Migrations.SqlServerDbContext
             modelBuilder.Entity("DbModels.csCommentDbM", b =>
                 {
                     b.HasOne("DbModels.csAttractionDbM", "AttractionDbM")
-                        .WithMany("commentDbM")
+                        .WithMany("CommentDbM")
                         .HasForeignKey("AttractionDbMAttractionId");
 
                     b.HasOne("DbModels.csUserDbM", "UserDbM")
@@ -173,7 +158,7 @@ namespace DbContext.Migrations.SqlServerDbContext
 
             modelBuilder.Entity("DbModels.csAttractionDbM", b =>
                 {
-                    b.Navigation("commentDbM");
+                    b.Navigation("CommentDbM");
                 });
 
             modelBuilder.Entity("DbModels.csLocationDbM", b =>
