@@ -23,7 +23,7 @@ public class csAttractionDbM : csAttraction, ISeed<csAttractionDbM>
     public  List<csCommentDbM> CommentDbM { get; set; }
 
     [JsonIgnore]
-    public virtual csLocationDbM LocationDbM { get; set; } = null;
+    public virtual csLocationDbM LocationDbM { get; set; } = null; 
 
     public override csAttractionDbM Seed (csSeedGenerator _seeder)
     {

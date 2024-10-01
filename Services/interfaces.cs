@@ -13,5 +13,5 @@ public interface IAttractionService
 
      public Task<csAttractionDbM> ReadOneAttractionAsync(Guid attractionId);
 
-     public Task<csUserDbM> ReadUsers();
+     public Task<csRespPageDTO<IUser>>  ReadUsers(bool seeded, bool flat, string filter, int pageNumber, int pageSize);
 }

@@ -116,11 +116,16 @@ namespace AppWebApi.Controllers
         [ActionName("ReadUsers")]
         [ProducesResponseType(200, Type = typeof(csRespPageDTO<IUser>))]
         [ProducesResponseType(400, Type = typeof(string))]
-        public async Task<IActionResult> ReadUsers()
+        public async Task<IActionResult> ReadUsers(string seeded = "true", string flat = "true",
+            string filter = null, string pageNr = "0", string pageSize = "10")
         {
             _logger.LogInformation("Endpoint Users executed");
+             bool _seeded = bool.Parse(seeded);
+             bool _flat = bool.Parse(flat);
+            int _pageNr = int.Parse(pageNr);
+            int _pageSize = int.Parse(pageSize);
 
-            var users = await _service.ReadUsers();
+            var users = await _service.ReadUsers(_seeded, _flat, filter?.Trim()?.ToLower(), _pageNr, _pageSize);
             if(users == null)
             {
                 return NotFound(); // Returns 404 response
