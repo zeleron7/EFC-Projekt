@@ -30,6 +30,8 @@ public class csAttractionRepo : IAttractionRepo
             {
                 var newLocation = new csLocationDbM().Seed(_seeder);
 
+                attraction.CommentDbM = _seeder.ItemsToList<csCommentDbM>(_seeder.Next(0,21)); //TA bort denna rad?
+
                 var exsistLocation = locations.FirstOrDefault(l => l.Country == newLocation.Country && l.City == newLocation.City)
                 ?? db.Locations.FirstOrDefault(l => l.Country == newLocation.Country && l.City == newLocation.City);
 
@@ -143,6 +145,7 @@ public class csAttractionRepo : IAttractionRepo
         {
             //_query = db.Attractions.AsNoTracking();
             _query = db.Attractions.Include(a => a.CommentDbM).Where(a => a.CommentDbM == null).AsNoTracking();
+
         }
         else
         {
