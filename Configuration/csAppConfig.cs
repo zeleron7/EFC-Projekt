@@ -8,6 +8,7 @@ public sealed class csAppConfig
     public const string Appsettingfile = "appsettings.json";
 
     public const string UserSecretId = "18a32a17-88a5-4e2f-a78b-37c90621261b";
+                                
 
     #region Singleton design pattern
     private static readonly object instanceLock = new();

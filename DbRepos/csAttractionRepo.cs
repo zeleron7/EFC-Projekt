@@ -14,7 +14,7 @@ public class csAttractionRepo : IAttractionRepo
     const string _seedSource = "./friends-seeds1.json";
 
     //Method to seed database
-    public void  SeedDatabaseAsync()
+    public async Task SeedDatabaseAsync()
     {
         var fn = Path.GetFullPath(_seedSource);
         var _seeder = new csSeedGenerator(fn);
@@ -62,7 +62,9 @@ public class csAttractionRepo : IAttractionRepo
             db.Attractions.AddRange(attractions);
             db.Comments.AddRange(allComments);
 
-            db.SaveChangesAsync();
+            await db.SaveChangesAsync();
+
+            
 
         }
     }

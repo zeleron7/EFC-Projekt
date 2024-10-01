@@ -19,7 +19,7 @@ namespace AppWebApi.Controllers
     public class csAdminController : Controller
     {
         IAttractionRepo _iAttractionService = null;
-        
+
         //Seed database
         [HttpGet()]
         [ActionName("Seed")]
@@ -29,7 +29,7 @@ namespace AppWebApi.Controllers
         {
             try
             {
-                _iAttractionService.SeedDatabaseAsync();
+                await _iAttractionService.SeedDatabaseAsync();
                 return Ok("Sedeed");
             }
             catch (Exception ex)
@@ -42,6 +42,8 @@ namespace AppWebApi.Controllers
         {
             _iAttractionService = service;
         }
+
+    
     }
 }
 

@@ -13,7 +13,7 @@ public class csAttractionServiceDb: IAttractionService
 {
     private IAttractionRepo _repo = null;
 
-    public void SeedDatabaseAsync () => _repo.SeedDatabaseAsync();
+    public Task SeedDatabaseAsync () => _repo.SeedDatabaseAsync();
 
     public Task<csRespPageDTO<IAttraction>> ReadAttractionsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
