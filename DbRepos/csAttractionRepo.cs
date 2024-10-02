@@ -30,7 +30,7 @@ public class csAttractionRepo : IAttractionRepo
             {
                 var newLocation = new csLocationDbM().Seed(_seeder);
 
-                attraction.CommentDbM = _seeder.ItemsToList<csCommentDbM>(_seeder.Next(0,21)); //TA bort denna rad?
+                //attraction.CommentDbM = _seeder.ItemsToList<csCommentDbM>(_seeder.Next(0,21)); //TA bort denna rad?
 
                 var exsistLocation = locations.FirstOrDefault(l => l.Country == newLocation.Country && l.City == newLocation.City)
                 ?? db.Locations.FirstOrDefault(l => l.Country == newLocation.Country && l.City == newLocation.City);
@@ -207,7 +207,7 @@ public class csAttractionRepo : IAttractionRepo
     }
 
     //Method to read users and their comments
-    public async Task<csRespPageDTO<Models.IUser>> ReadUsers(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
+    public async Task<csRespPageDTO<Models.IUser>> ReadUsersAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
         using (var db = csMainDbContext.DbContext("sysadmin"))
     {

@@ -11,7 +11,7 @@ namespace DbModels;
 public class csUserDbM : csUser, ISeed<csUserDbM>
 {
     [Key]
-    public override Guid UserId { get; set; }
+    public override Guid UserId { get; set; } = Guid.NewGuid();
    
     [NotMapped]
     public override List<IComment> Comments { get => CommentDbM?.ToList<IComment>(); set => throw new NotImplementedException(); }

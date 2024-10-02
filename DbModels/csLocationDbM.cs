@@ -9,7 +9,7 @@ namespace DbModels;
 public class csLocationDbM : csLocation, ISeed<csLocationDbM>, IEquatable<csLocationDbM>
 {
    [Key]
-   public override Guid LocationId { get; set;}
+   public override Guid LocationId { get; set;} = Guid.NewGuid();
 
    [NotMapped]
    public override List<IAttraction> Attractions { get => AttractionsDbM?.ToList<IAttraction>(); set => new NotImplementedException(); }

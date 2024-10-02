@@ -11,7 +11,7 @@ namespace DbModels;
 public class csAttractionDbM : csAttraction, ISeed<csAttractionDbM>
 {
     [Key]
-    public override Guid AttractionId { get; set; }
+    public override Guid AttractionId { get; set; } = Guid.NewGuid();
 
     [NotMapped]
     public override List<IComment> Comments { get => CommentDbM?.ToList<IComment>(); set => throw new NotImplementedException(); }

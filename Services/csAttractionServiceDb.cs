@@ -30,9 +30,9 @@ public class csAttractionServiceDb: IAttractionService
         return _repo.ReadOneAttractionAsync(attractionId);
     }
 
-    public Task<csRespPageDTO<IUser>> ReadUsers(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
+    public Task<csRespPageDTO<IUser>> ReadUsersAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
-        return _repo.ReadUsers(seeded, flat, filter, pageNumber, pageSize);
+        return _repo.ReadUsersAsync(seeded, flat, filter, pageNumber, pageSize);
     }
 
     public csAttractionServiceDb(IAttractionRepo repo)

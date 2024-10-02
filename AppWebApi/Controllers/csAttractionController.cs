@@ -123,7 +123,7 @@ namespace AppWebApi.Controllers
             int _pageNr = int.Parse(pageNr);
             int _pageSize = int.Parse(pageSize);
 
-            var users = await _service.ReadUsers(_seeded, _flat, filter?.Trim()?.ToLower(), _pageNr, _pageSize);
+            var users = await _service.ReadUsersAsync(_seeded, _flat, filter?.Trim()?.ToLower(), _pageNr, _pageSize);
             if(users == null)
             {
                 return NotFound(); // Returns 404 response
