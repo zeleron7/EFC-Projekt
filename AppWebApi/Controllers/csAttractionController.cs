@@ -37,7 +37,6 @@ namespace AppWebApi.Controllers
             }
         }
 
-
         //GET: api/Attractions/Read
         [HttpGet()]
         [ActionName("ReadAttractions")]

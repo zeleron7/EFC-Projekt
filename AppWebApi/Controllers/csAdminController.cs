@@ -42,7 +42,6 @@ namespace AppWebApi.Controllers
         {
             _iAttractionService = service;
         }
-
     
     }
 }
