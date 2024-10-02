@@ -63,7 +63,6 @@ namespace AppWebApi.Controllers
             }
         }
     
-
         //GET: api/Attractions/ReadWithoutComments
         [HttpGet()]
         [ActionName("ReadWithoutComment")]
