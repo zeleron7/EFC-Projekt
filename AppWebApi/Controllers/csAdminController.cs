@@ -20,8 +20,6 @@ namespace AppWebApi.Controllers
     {
         IAttractionRepo _iAttractionService = null;
 
-        private IAttractionService _service = null;
-
         //Seed database
         [HttpGet()]
         [ActionName("Seed")]
