@@ -89,7 +89,6 @@ namespace AppWebApi.Controllers
             }
         }
 
-
         //GET: api/Attractions/ReadOneAttraction
         [HttpGet()]
         [ActionName("ReadOneAttraction")]

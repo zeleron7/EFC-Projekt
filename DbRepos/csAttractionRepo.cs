@@ -136,53 +136,57 @@ public class csAttractionRepo : IAttractionRepo
     //Method to read attraction without comments
     public async Task<csRespPageDTO<IAttraction>> ReadAttractionsWithoutCommentsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
-    using (var db = csMainDbContext.DbContext("sysadmin"))
-    {
-
-        IQueryable<csAttractionDbM> _query;
-
-        if (flat)
+        using (var db = csMainDbContext.DbContext("sysadmin"))
         {
-            //_query = db.Attractions.AsNoTracking();
-            _query = db.Attractions.Include(a => a.CommentDbM).Where(a => a.CommentDbM == null).AsNoTracking();
+            IQueryable<csAttractionDbM> _query;
 
+            if (flat)
+            {
+                _query = db.Attractions
+                    .Where(a => !a.CommentDbM.Any()) // Ändrat: Kolla om ingen kommentar finns
+                    .AsNoTracking();
+            }
+            else
+            {
+                _query = db.Attractions
+                    .Include(i => i.LocationDbM) // Inkludera platsinformation
+                    .Where(a => !a.CommentDbM.Any()) // Ändrat: Kolla om ingen kommentar finns
+                    .AsNoTracking();
+            }
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                _query = _query.Where(a =>
+                    (a.Category != null && a.Category.Contains(filter)) ||
+                    (a.Title != null && a.Title.Contains(filter)) ||
+                    (a.Description != null && a.Description.Contains(filter)) ||
+                    (a.LocationDbM != null && a.LocationDbM.Country != null && a.LocationDbM.Country.Contains(filter)) ||
+                    (a.LocationDbM != null && a.LocationDbM.City != null && a.LocationDbM.City.Contains(filter))
+                );
+            }
+
+            // Validera pageNumber
+            if (pageNumber < 1) // Om pageNumber är mindre än 1, sätt det till 1
+            {
+                pageNumber = 1;
+            }
+
+            var totalItems = await _query.CountAsync();
+            var items = await _query
+                .Skip((pageNumber - 1) * pageSize) // Justera skip-logik
+                .Take(pageSize)
+                .ToListAsync<IAttraction>();
+
+            var _ret = new csRespPageDTO<IAttraction>
+            {
+                PageItems = items,
+                DbItemsCount = totalItems,
+                PageNr = pageNumber,
+                PageSize = pageSize
+            };
+
+            return _ret;
         }
-        else
-        {
-            _query = db.Attractions.Include(a => a.CommentDbM).Where(a => a.CommentDbM == null).AsNoTracking()
-                .Include(i => i.LocationDbM);
-        }
-
-        if (!string.IsNullOrEmpty(filter))
-        {
-            _query = _query.Where(a =>
-                (a.Category != null && a.Category.Contains(filter)) ||
-                (a.Title != null && a.Title.Contains(filter)) ||
-                (a.Description != null && a.Description.Contains(filter)) ||
-                (a.LocationDbM != null && a.LocationDbM.Country != null && a.LocationDbM.Country.Contains(filter)) ||
-                (a.LocationDbM != null && a.LocationDbM.City != null && a.LocationDbM.City.Contains(filter))
-            );
-        }
-
-        //_query = _query.Where(a => a.CommentDbM == null || !a.CommentDbM.Any()); 
-        
-
-        var totalItems = await _query.CountAsync();
-        var items = await _query
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync<IAttraction>();
-
-        var _ret = new csRespPageDTO<IAttraction>
-        {
-            PageItems = items,
-            DbItemsCount = totalItems,
-            PageNr = pageNumber,
-            PageSize = pageSize
-        };
-
-        return _ret;
-    }
     }
 
     //Method to read one attraction
