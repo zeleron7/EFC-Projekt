@@ -11,13 +11,13 @@ namespace DbModels;
 public class csUserDbM : csUser, ISeed<csUserDbM>
 {
     [Key]
-    public override Guid UserId { get; set; } = Guid.NewGuid();
+    public override Guid UserId { get; set; }
    
     [NotMapped]
     public override List<IComment> Comments { get => CommentDbM?.ToList<IComment>(); set => throw new NotImplementedException(); }
 
     [JsonIgnore]
-    public  List<csCommentDbM> CommentDbM { get; set; }
+    public virtual List<csCommentDbM> CommentDbM { get; set; } = null;
 
     public override csUserDbM Seed (csSeedGenerator _seeder)
     {

@@ -11,7 +11,7 @@ namespace DbModels;
 public class csCommentDbM : csComment, ISeed<csCommentDbM>
 {
     [Key]
-    public override Guid CommentId { get; set; } = Guid.NewGuid();
+    public override Guid CommentId { get; set; }
 
     [NotMapped]
     public override IUser User { get => UserDbM; set => throw new NotImplementedException(); }
@@ -20,10 +20,10 @@ public class csCommentDbM : csComment, ISeed<csCommentDbM>
     public override IAttraction Attraction { get => AttractionDbM; set => throw new NotImplementedException(); }
 
     [JsonIgnore]
-    public  csUserDbM UserDbM { get; set; }
+    public virtual csUserDbM UserDbM { get; set; } = null;
     
     [JsonIgnore]
-    public csAttractionDbM AttractionDbM { get; set; }
+    public virtual csAttractionDbM AttractionDbM { get; set; } = null;
 
     public override csCommentDbM Seed (csSeedGenerator _seeder)
     {

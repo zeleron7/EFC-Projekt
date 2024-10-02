@@ -74,13 +74,13 @@ namespace AppWebApi.Controllers
             _logger.LogInformation("Endpoint Attractions executed");
             try
             {
-                 _logger.LogInformation("Endpoint Attractions executed");
+                _logger.LogInformation("Endpoint Attractions executed");
                 bool _seeded = bool.Parse(seeded);
                 bool _flat = bool.Parse(flat);
                 int _pageNr = int.Parse(pageNr);
                 int _pageSize = int.Parse(pageSize);
-     
-                var _resp = await _service.ReadAttractionsWithoutCommentsAsync(_seeded, _flat, filter?.Trim()?.ToLower(), _pageNr, _pageSize);     
+
+                var _resp = await _service.ReadAttractionsWithoutCommentsAsync(_seeded, _flat, filter?.Trim()?.ToLower(), _pageNr, _pageSize);
                 return Ok(_resp);
             }
             catch (Exception ex)

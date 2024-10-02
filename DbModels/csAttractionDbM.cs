@@ -11,7 +11,7 @@ namespace DbModels;
 public class csAttractionDbM : csAttraction, ISeed<csAttractionDbM>
 {
     [Key]
-    public override Guid AttractionId { get; set; } = Guid.NewGuid();
+    public override Guid AttractionId { get; set; }
 
     [NotMapped]
     public override List<IComment> Comments { get => CommentDbM?.ToList<IComment>(); set => throw new NotImplementedException(); }
@@ -20,7 +20,7 @@ public class csAttractionDbM : csAttraction, ISeed<csAttractionDbM>
     public override ILocation Locations { get => LocationDbM; set => throw new NotImplementedException(); }
 
     [JsonIgnore]
-    public  List<csCommentDbM> CommentDbM { get; set; }
+    public virtual List<csCommentDbM> CommentDbM { get; set; } = null;
 
     [JsonIgnore]
     public virtual csLocationDbM LocationDbM { get; set; } = null; 

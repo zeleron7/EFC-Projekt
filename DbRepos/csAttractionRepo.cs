@@ -18,22 +18,24 @@ public class csAttractionRepo : IAttractionRepo
     {
         var fn = Path.GetFullPath(_seedSource);
         var _seeder = new csSeedGenerator(fn);
-        
+
         using (var db = csMainDbContext.DbContext("sysadmin"))
         {
             var users = _seeder.ItemsToList<csUserDbM>(50);
             var attractions = _seeder.ItemsToList<csAttractionDbM>(1000);
-            var locations = _seeder.ItemsToList<csLocationDbM>(100); 
+
             var allComments = new List<csCommentDbM>();
+            var locations = new List<csLocationDbM>(100);
+
+
 
             foreach (var attraction in attractions)
             {
                 var newLocation = new csLocationDbM().Seed(_seeder);
 
-                //attraction.CommentDbM = _seeder.ItemsToList<csCommentDbM>(_seeder.Next(0,21)); //TA bort denna rad?
-
                 var exsistLocation = locations.FirstOrDefault(l => l.Country == newLocation.Country && l.City == newLocation.City)
                 ?? db.Locations.FirstOrDefault(l => l.Country == newLocation.Country && l.City == newLocation.City);
+
 
                 if (exsistLocation == null)
                 {
@@ -50,24 +52,21 @@ public class csAttractionRepo : IAttractionRepo
                 {
                     for (int i = 0; i < nmrOfComments; i++)
                     {
-                       var comment = new csCommentDbM().Seed(_seeder);
-                       comment.UserDbM = _seeder.FromList(users);
-                       comment.AttractionDbM = attraction;
+                        var comment = new csCommentDbM().Seed(_seeder);
+                        comment.UserDbM = _seeder.FromList(users);
+                        comment.AttractionDbM = attraction;
 
-                       allComments.Add(comment);
+                        allComments.Add(comment);
                     }
-                }   
+
+                }
+
             }
-           
-            db.Locations.AddRange(locations);
             db.Users.AddRange(users);
             db.Attractions.AddRange(attractions);
             db.Comments.AddRange(allComments);
 
             await db.SaveChangesAsync();
-
-            
-
         }
     }
     
@@ -136,57 +135,57 @@ public class csAttractionRepo : IAttractionRepo
     //Method to read attraction without comments
     public async Task<csRespPageDTO<IAttraction>> ReadAttractionsWithoutCommentsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
-        using (var db = csMainDbContext.DbContext("sysadmin"))
+    using (var db = csMainDbContext.DbContext("sysadmin"))
+    {
+        IQueryable<csAttractionDbM> _query;
+
+        if (flat)
         {
-            IQueryable<csAttractionDbM> _query;
-
-            if (flat)
-            {
-                _query = db.Attractions
-                    .Where(a => !a.CommentDbM.Any()) // Ändrat: Kolla om ingen kommentar finns
-                    .AsNoTracking();
-            }
-            else
-            {
-                _query = db.Attractions
-                    .Include(i => i.LocationDbM) // Inkludera platsinformation
-                    .Where(a => !a.CommentDbM.Any()) // Ändrat: Kolla om ingen kommentar finns
-                    .AsNoTracking();
-            }
-
-            if (!string.IsNullOrEmpty(filter))
-            {
-                _query = _query.Where(a =>
-                    (a.Category != null && a.Category.Contains(filter)) ||
-                    (a.Title != null && a.Title.Contains(filter)) ||
-                    (a.Description != null && a.Description.Contains(filter)) ||
-                    (a.LocationDbM != null && a.LocationDbM.Country != null && a.LocationDbM.Country.Contains(filter)) ||
-                    (a.LocationDbM != null && a.LocationDbM.City != null && a.LocationDbM.City.Contains(filter))
-                );
-            }
-
-            // Validera pageNumber
-            if (pageNumber < 1) // Om pageNumber är mindre än 1, sätt det till 1
-            {
-                pageNumber = 1;
-            }
-
-            var totalItems = await _query.CountAsync();
-            var items = await _query
-                .Skip((pageNumber - 1) * pageSize) // Justera skip-logik
-                .Take(pageSize)
-                .ToListAsync<IAttraction>();
-
-            var _ret = new csRespPageDTO<IAttraction>
-            {
-                PageItems = items,
-                DbItemsCount = totalItems,
-                PageNr = pageNumber,
-                PageSize = pageSize
-            };
-
-            return _ret;
+            _query = db.Attractions
+                .Where(a => !a.CommentDbM.Any()) // Ändrat: Kolla om ingen kommentar finns
+                .AsNoTracking();
         }
+        else
+        {
+            _query = db.Attractions
+                .Include(i => i.LocationDbM) // Inkludera platsinformation
+                .Where(a => !a.CommentDbM.Any()) // Ändrat: Kolla om ingen kommentar finns
+                .AsNoTracking();
+        }
+
+        if (!string.IsNullOrEmpty(filter))
+        {
+            _query = _query.Where(a =>
+                (a.Category != null && a.Category.Contains(filter)) ||
+                (a.Title != null && a.Title.Contains(filter)) ||
+                (a.Description != null && a.Description.Contains(filter)) ||
+                (a.LocationDbM != null && a.LocationDbM.Country != null && a.LocationDbM.Country.Contains(filter)) ||
+                (a.LocationDbM != null && a.LocationDbM.City != null && a.LocationDbM.City.Contains(filter))
+            );
+        }
+
+        // Validera pageNumber
+        if (pageNumber < 1) // Om pageNumber är mindre än 1, sätt det till 1
+        {
+            pageNumber = 1;
+        }
+
+        var totalItems = await _query.CountAsync();
+        var items = await _query
+            .Skip((pageNumber - 1) * pageSize) // Justera skip-logik
+            .Take(pageSize)
+            .ToListAsync<IAttraction>();
+
+        var _ret = new csRespPageDTO<IAttraction>
+        {
+            PageItems = items,
+            DbItemsCount = totalItems,
+            PageNr = pageNumber,
+            PageSize = pageSize
+        };
+
+        return _ret;
+    }
     }
 
     //Method to read one attraction

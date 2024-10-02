@@ -197,7 +197,88 @@
       "jsonCountry": "Finland",
       "jsonStreets": "Arkandiankatu, Liisankatu, Ruoholahdenkatu, Pohjoistranta, Eerikinkatu, Vauhtitie, Itainen Vaideki",
       "jsonCities": "Helsingfors, Espoo, Tampere, Vaanta, Oulu"
+    },
+    {
+      "jsonCountry": "Armenia",
+      "jsonStreets": "Arshakuniats Avenue, Davit Anhagt Street, Mazmanyan Street, Madoyan Street, Lalayan Street, Hanrapetutyan Street, Charents Street ",
+      "jsonCities": "Yerevan, Gyumri, Hrazdan, Ararat, Ejmiatsin"
+    },
+    {
+      "jsonCountry": "South Africa",
+      "jsonStreets": "Long Street, Adderley Street, Kloof Street, Rivonia Road, Voortrekker Road, Main Road, Loop Street",
+      "jsonCities": "Cape Town, Johannesburg, Durban, Pretoria, Port Elizabeth"
+    },
+    {
+      "jsonCountry": "Canada",
+      "jsonStreets": "Yonge Street, Bloor Street, Robson Street, Queen Street, Saint-Catherine Street, Jasper Avenue, Granville Street",
+      "jsonCities": "Toronto, Vancouver, Montreal, Calgary, Ottawa"
+    },
+    {
+      "jsonCountry": "Egypt",
+      "jsonStreets": "Al Haram Street, Talaat Harb Street, Sharia Ramses, El-Muizz Street, Corniche El Nile, Al Tahrir Street, Qasr El Nil Street",
+      "jsonCities": "Cairo, Alexandria, Giza, Luxor, Aswan"
+    },
+    {
+      "jsonCountry": "Argentina",
+      "jsonStreets": "Avenida 9 de Julio, Avenida Corrientes, Avenida Santa Fe, Avenida de Mayo, Avenida Callao, Florida Street, Avenida Libertador",
+      "jsonCities": "Buenos Aires, Córdoba, Rosario, Mendoza, La Plata"
+    },
+    {
+      "jsonCountry": "Thailand",
+      "jsonStreets": "Khao San Road, Sukhumvit Road, Silom Road, Phahonyothin Road, Ratchadaphisek Road, Yaowarat Road, Charoen Krung Road",
+      "jsonCities": "Bangkok, Chiang Mai, Phuket, Pattaya, Nakhon Ratchasima"
+    },
+    {
+      "jsonCountry": "Italy",
+      "jsonStreets": "Via Condotti, Via del Corso, Via Nazionale, Corso Vittorio Emanuele II, Via Veneto, Via della Conciliazione, Via Garibaldi",
+      "jsonCities": "Rome, Milan, Naples, Turin, Florence"
+    },
+    {
+      "jsonCountry": "Japan",
+      "jsonStreets": "Takeshita Street, Omotesando, Nakamise Street, Shibuya Scramble Crossing, Nishiki Market Street, Dotonbori Street, Asakusa Dori",
+      "jsonCities": "Tokyo, Kyoto, Osaka, Yokohama, Nagoya"
+    },
+    {
+      "jsonCountry": "Brazil",
+      "jsonStreets": "Avenida Paulista, Rua Augusta, Avenida Atlântica, Avenida Presidente Vargas, Rua Oscar Freire, Rua da Consolação, Rua 25 de Março",
+      "jsonCities": "São Paulo, Rio de Janeiro, Brasília, Salvador, Curitiba"
+    },
+    {
+      "jsonCountry": "India",
+      "jsonStreets": "Chandni Chowk, MG Road, Brigade Road, Park Street, Nehru Place, Connaught Place, Linking Road",
+      "jsonCities": "New Delhi, Mumbai, Bengaluru, Kolkata, Hyderabad"
+    },
+    {
+      "jsonCountry": "Mexico",
+      "jsonStreets": "Avenida Paseo de la Reforma, Calle Madero, Avenida Insurgentes, Avenida Juárez, Avenida Presidente Masaryk, Avenida Tulum, Avenida Chapultepec",
+      "jsonCities": "Mexico City, Guadalajara, Monterrey, Puebla, Cancún"
+    },
+    {
+      "jsonCountry": "Australia",
+      "jsonStreets": "George Street, Collins Street, Pitt Street, Bourke Street, Queen Street, Flinders Street, Elizabeth Street",
+      "jsonCities": "Sydney, Melbourne, Brisbane, Perth, Adelaide"
+    },
+    {
+      "jsonCountry": "Spain",
+      "jsonStreets": "La Rambla, Gran Via, Paseo de la Castellana, Calle Serrano, Calle Mayor, Calle de Alcalá, Paseo del Prado",
+      "jsonCities": "Madrid, Barcelona, Valencia, Seville, Bilbao"
+    },
+    {
+      "jsonCountry": "China",
+      "jsonStreets": "Nanjing Road, Wangfujing Street, Bund Promenade, Zhongshan Road, Huaihai Road, Chunxi Road, Pedestrian Street",
+      "jsonCities": "Beijing, Shanghai, Guangzhou, Shenzhen, Chengdu"
+    },
+    {
+      "jsonCountry": "France",
+      "jsonStreets": "Champs-Élysées, Rue de Rivoli, Boulevard Saint-Germain, Avenue Montaigne, Rue Saint-Honoré, Rue de la Paix, Boulevard Haussmann",
+      "jsonCities": "Paris, Lyon, Marseille, Nice, Toulouse"
+    },
+    {
+      "jsonCountry": "United States",
+      "jsonStreets": "Fifth Avenue, Wall Street, Rodeo Drive, Sunset Boulevard, Michigan Avenue, Bourbon Street, Hollywood Boulevard",
+      "jsonCities": "New York, Los Angeles, Chicago, Houston, Miami"
     }
+
   ],
   "_names": {
     "jsonFirstNames": "Harry, Lord, Hermione, Albus, Severus, Ron, Draco, Frodo, Gandalf, Sam, Peregrin, Saruman",

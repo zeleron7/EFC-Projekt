@@ -18,7 +18,9 @@ namespace AppWebApi.Controllers
     [Route("api/[controller]/[action]")]
     public class csAdminController : Controller
     {
-        IAttractionRepo _iAttractionService = null;
+        //IAttractionRepo _iAttractionService = null;
+
+        IAttractionService _iAttractionService = null;
 
         //Seed database
         [HttpGet()]
@@ -38,7 +40,12 @@ namespace AppWebApi.Controllers
             }
         }
         
-        public csAdminController(IAttractionRepo service)
+        /*public csAdminController(IAttractionRepo service)
+        {
+            _iAttractionService = service;
+        }*/
+
+        public csAdminController(IAttractionService service)
         {
             _iAttractionService = service;
         }

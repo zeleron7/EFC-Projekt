@@ -22,7 +22,7 @@ public class csAttractionServiceDb: IAttractionService
 
     public Task<csRespPageDTO<IAttraction>> ReadAttractionsWithoutCommentsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
-        return _repo.ReadAttractionsAsync(seeded, flat, filter, pageNumber, pageSize);
+        return _repo.ReadAttractionsWithoutCommentsAsync(seeded, flat, filter, pageNumber, pageSize);
     }
 
     public Task<csAttractionDbM> ReadOneAttractionAsync(Guid attractionId)
