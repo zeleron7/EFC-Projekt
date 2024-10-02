@@ -24,8 +24,8 @@ public class csAttractionRepo : IAttractionRepo
             var users = _seeder.ItemsToList<csUserDbM>(50);
             var attractions = _seeder.ItemsToList<csAttractionDbM>(1000);
             var locations = _seeder.ItemsToList<csLocationDbM>(100); 
-            var allComments = new List <csCommentDbM>();
-            
+            var allComments = new List<csCommentDbM>();
+
             foreach (var attraction in attractions)
             {
                 var newLocation = new csLocationDbM().Seed(_seeder);
