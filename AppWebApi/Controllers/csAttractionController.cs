@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTO;
 using Seido.Utilities.SeedGenerator;
-
 using Models;
 using Services;
 using Configuration;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace AppWebApi.Controllers
 {
@@ -125,13 +122,13 @@ namespace AppWebApi.Controllers
             var users = await _service.ReadUsersAsync(_seeded, _flat, filter?.Trim()?.ToLower(), _pageNr, _pageSize);
             if(users == null)
             {
-                return NotFound(); // Returns 404 response
+                return NotFound(); 
             }
 
-            return Ok(users);  // Return the data with 200 OK status
+            return Ok(users); 
 
         }
-
+        
         public csAttractionController(IAttractionService service, ILogger<csAttractionController> logger)
         {
             _service = service;

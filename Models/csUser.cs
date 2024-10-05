@@ -8,17 +8,14 @@ namespace Models;
 public class csUser : IUser, ISeed<csUser>
 {
     [Key]
-    public virtual Guid UserId {get; set;} 
-
+    public virtual Guid UserId {get; set;} //Primary Key
     public virtual string FirstName {get; set;}
     public virtual string LastName {get; set;}
-    
     public virtual DateTime Age {get; set;}
-
     public bool Seeded { get; set; } = false;
-
     public virtual List<IComment> Comments {get; set;}
 
+    //Seeds random data
     public virtual csUser Seed (csSeedGenerator _seeder)
     {
         Seeded = true;

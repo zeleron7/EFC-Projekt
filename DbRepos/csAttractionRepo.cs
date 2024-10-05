@@ -87,174 +87,167 @@ public class csAttractionRepo : IAttractionRepo
     //Method to read attractions
     public async Task<csRespPageDTO<IAttraction>> ReadAttractionsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
-    using (var db = csMainDbContext.DbContext("sysadmin"))
-    {
-        IQueryable<csAttractionDbM> _query;
-
-        if (flat)
+        using (var db = csMainDbContext.DbContext("sysadmin"))
         {
-            _query = db.Attractions.AsNoTracking();
+            IQueryable<csAttractionDbM> _query;
+
+            if (flat)
+            {
+                _query = db.Attractions.AsNoTracking();
+            }
+            else
+            {
+                _query = db.Attractions.AsNoTracking()
+                    .Include(i => i.CommentDbM)
+                    .Include(i => i.LocationDbM);
+                    
+            }
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                _query = _query.Where(a =>
+                    (a.Category != null && a.Category.Contains(filter)) ||
+                    (a.Title != null && a.Title.Contains(filter)) ||
+                    (a.Description != null && a.Description.Contains(filter)) ||
+                    (a.LocationDbM != null && a.LocationDbM.Country != null && a.LocationDbM.Country.Contains(filter)) ||
+                    (a.LocationDbM != null && a.LocationDbM.City != null && a.LocationDbM.City.Contains(filter))
+                );
+            }
+
+            var totalItems = await _query.CountAsync();
+            var items = await _query
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+                .ToListAsync<IAttraction>();
+
+            var _ret = new csRespPageDTO<IAttraction>
+            {
+                PageItems = items,
+                DbItemsCount = totalItems,
+                PageNr = pageNumber,
+                PageSize = pageSize
+            };
+
+            return _ret;
         }
-        else
-        {
-            _query = db.Attractions.AsNoTracking()
-                .Include(i => i.CommentDbM)
-                .Include(i => i.LocationDbM);
-                
-        }
-
-        if (!string.IsNullOrEmpty(filter))
-        {
-            _query = _query.Where(a =>
-                (a.Category != null && a.Category.Contains(filter)) ||
-                (a.Title != null && a.Title.Contains(filter)) ||
-                (a.Description != null && a.Description.Contains(filter)) ||
-                (a.LocationDbM != null && a.LocationDbM.Country != null && a.LocationDbM.Country.Contains(filter)) ||
-                (a.LocationDbM != null && a.LocationDbM.City != null && a.LocationDbM.City.Contains(filter))
-            );
-        }
-
-        var totalItems = await _query.CountAsync();
-        var items = await _query
-            .Skip(pageNumber * pageSize)
-            .Take(pageSize)
-            .ToListAsync<IAttraction>();
-
-        var _ret = new csRespPageDTO<IAttraction>
-        {
-            PageItems = items,
-            DbItemsCount = totalItems,
-            PageNr = pageNumber,
-            PageSize = pageSize
-        };
-
-        return _ret;
-    }
     }
 
     //Method to read attraction without comments
     public async Task<csRespPageDTO<IAttraction>> ReadAttractionsWithoutCommentsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
-    using (var db = csMainDbContext.DbContext("sysadmin"))
-    {
-        IQueryable<csAttractionDbM> _query;
-
-        if (flat)
+        using (var db = csMainDbContext.DbContext("sysadmin"))
         {
-            _query = db.Attractions
-                .Where(a => !a.CommentDbM.Any()) // Ändrat: Kolla om ingen kommentar finns
-                .AsNoTracking();
+            IQueryable<csAttractionDbM> _query;
+
+            if (flat)
+            {
+                _query = db.Attractions
+                    .Where(a => !a.CommentDbM.Any()) 
+                    .AsNoTracking();
+            }
+            else
+            {
+                _query = db.Attractions
+                    .Include(i => i.LocationDbM) 
+                    .Where(a => !a.CommentDbM.Any()) 
+                    .AsNoTracking();
+            }
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                _query = _query.Where(a =>
+                    (a.Category != null && a.Category.Contains(filter)) ||
+                    (a.Title != null && a.Title.Contains(filter)) ||
+                    (a.Description != null && a.Description.Contains(filter)) ||
+                    (a.LocationDbM != null && a.LocationDbM.Country != null && a.LocationDbM.Country.Contains(filter)) ||
+                    (a.LocationDbM != null && a.LocationDbM.City != null && a.LocationDbM.City.Contains(filter))
+                );
+            }
+
+            if (pageNumber < 1) 
+            {
+                pageNumber = 1;
+            }
+
+            var totalItems = await _query.CountAsync();
+            var items = await _query
+                .Skip((pageNumber - 1) * pageSize) 
+                .Take(pageSize)
+                .ToListAsync<IAttraction>();
+
+            var _ret = new csRespPageDTO<IAttraction>
+            {
+                PageItems = items,
+                DbItemsCount = totalItems,
+                PageNr = pageNumber,
+                PageSize = pageSize
+            };
+
+            return _ret;
         }
-        else
-        {
-            _query = db.Attractions
-                .Include(i => i.LocationDbM) // Inkludera platsinformation
-                .Where(a => !a.CommentDbM.Any()) // Ändrat: Kolla om ingen kommentar finns
-                .AsNoTracking();
-        }
-
-        if (!string.IsNullOrEmpty(filter))
-        {
-            _query = _query.Where(a =>
-                (a.Category != null && a.Category.Contains(filter)) ||
-                (a.Title != null && a.Title.Contains(filter)) ||
-                (a.Description != null && a.Description.Contains(filter)) ||
-                (a.LocationDbM != null && a.LocationDbM.Country != null && a.LocationDbM.Country.Contains(filter)) ||
-                (a.LocationDbM != null && a.LocationDbM.City != null && a.LocationDbM.City.Contains(filter))
-            );
-        }
-
-        // Validera pageNumber
-        if (pageNumber < 1) // Om pageNumber är mindre än 1, sätt det till 1
-        {
-            pageNumber = 1;
-        }
-
-        var totalItems = await _query.CountAsync();
-        var items = await _query
-            .Skip((pageNumber - 1) * pageSize) // Justera skip-logik
-            .Take(pageSize)
-            .ToListAsync<IAttraction>();
-
-        var _ret = new csRespPageDTO<IAttraction>
-        {
-            PageItems = items,
-            DbItemsCount = totalItems,
-            PageNr = pageNumber,
-            PageSize = pageSize
-        };
-
-        return _ret;
-    }
     }
 
     //Method to read one attraction
     public async Task<csAttractionDbM> ReadOneAttractionAsync(Guid attractionId)
     {
-    using (var db = csMainDbContext.DbContext("sysadmin"))
-    {
-        var attraction = await db.Attractions
-            .AsNoTracking()
-            .Include(a => a.CommentDbM)   
-            .Include(a => a.LocationDbM)  
-            .Where(a =>  a.AttractionId == attractionId)
-            .FirstOrDefaultAsync();
-
-        if (attraction == null)
+        using (var db = csMainDbContext.DbContext("sysadmin"))
         {
-            return null; 
-        }
+            var attraction = await db.Attractions
+                .AsNoTracking()
+                .Include(a => a.CommentDbM)   
+                .Include(a => a.LocationDbM)  
+                .Where(a =>  a.AttractionId == attractionId)
+                .FirstOrDefaultAsync();
 
-        return attraction; 
-    }
+            if (attraction == null)
+            {
+                return null; 
+            }
+
+            return attraction; 
+        }
     }
 
     //Method to read users and their comments
     public async Task<csRespPageDTO<Models.IUser>> ReadUsersAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
         using (var db = csMainDbContext.DbContext("sysadmin"))
-    {
-        IQueryable<csUserDbM> _query;
-
-        // Base query for flat or nested includes
-        if (flat)
         {
-            _query = db.Users.AsNoTracking();
+            IQueryable<csUserDbM> _query;
+
+            if (flat)
+            {
+                _query = db.Users.AsNoTracking();
+            }
+            else
+            {
+                _query = db.Users.AsNoTracking()
+                    .Include(i => i.CommentDbM);
+            }
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                _query = _query.Where(a =>
+                    (a.FirstName != null && a.FirstName.Contains(filter)) ||
+                    (a.LastName != null && a.LastName.Contains(filter)) 
+                );
+            }
+
+            var totalItems = await _query.CountAsync();
+            var items = await _query
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+                .ToListAsync<Models.IUser>();
+
+            var _ret = new csRespPageDTO<Models.IUser>
+            {
+                PageItems = items,
+                DbItemsCount = totalItems,
+                PageNr = pageNumber,
+                PageSize = pageSize
+            };
+
+            return _ret;
         }
-        else
-        {
-            _query = db.Users.AsNoTracking()
-                .Include(i => i.CommentDbM);
-        }
-
-        // Filtering by category, title, description, country, and city
-        if (!string.IsNullOrEmpty(filter))
-        {
-            _query = _query.Where(a =>
-                (a.FirstName != null && a.FirstName.Contains(filter)) ||
-                (a.LastName != null && a.LastName.Contains(filter)) 
-            );
-        }
-
-
-
-        // Pagination (skip and take)
-        var totalItems = await _query.CountAsync();
-        var items = await _query
-            .Skip(pageNumber * pageSize)
-            .Take(pageSize)
-            .ToListAsync<Models.IUser>();
-
-        // Returning paginated response
-        var _ret = new csRespPageDTO<Models.IUser>
-        {
-            PageItems = items,
-            DbItemsCount = totalItems,
-            PageNr = pageNumber,
-            PageSize = pageSize
-        };
-
-        return _ret;
-    }
     }
 }

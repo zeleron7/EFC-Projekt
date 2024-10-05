@@ -9,8 +9,6 @@ using Models;
 using Services;
 using Configuration;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace AppWebApi.Controllers
 {
     
@@ -18,8 +16,6 @@ namespace AppWebApi.Controllers
     [Route("api/[controller]/[action]")]
     public class csAdminController : Controller
     {
-        //IAttractionRepo _iAttractionService = null;
-
         IAttractionService _iAttractionService = null;
 
         //Seed database
@@ -40,11 +36,6 @@ namespace AppWebApi.Controllers
             }
         }
         
-        /*public csAdminController(IAttractionRepo service)
-        {
-            _iAttractionService = service;
-        }*/
-
         public csAdminController(IAttractionService service)
         {
             _iAttractionService = service;
